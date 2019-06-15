@@ -1,5 +1,5 @@
 ## 压测结果展示
-![knload Diagram](./images/Snip20190615_436.png)
+![knload Diagram](./images/Snip20190615_437.png)
 
 ## 编译
 代码中自带 Makefile，直接执行 `make` 即可完成编译。
