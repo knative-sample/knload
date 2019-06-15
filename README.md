@@ -1,5 +1,12 @@
-使用方法：
+## 编译
+代码中自带 Makefile，直接执行 `make` 即可完成编译。
+也可以执行 ./build/build-image.sh 自动编译镜像
+
+## 使用方法：
+
+```
 time knload --stages=3:10,10:30,50:30,100:30,450:50  --service-url=httpload-server.default.example.com?sleep=400 --gateway-address=39.97.31.219:80 --save-path=/tmp/index.html --namespace=default --label='app=httpload-server' -v 5
+```
 
 参数解释：
 - --stages
