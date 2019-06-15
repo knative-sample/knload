@@ -10,7 +10,7 @@ import (
 
 	"os"
 
-	"github.com/knative-sample/knload/pkg/httpload"
+	"github.com/knative-sample/knload/pkg/knload"
 	"github.com/golang/glog"
 )
 
@@ -53,9 +53,9 @@ func run(stopCh <-chan struct{}, ops *options.Options) {
 	}
 
 	ss := strings.Split(ops.Stages, ",")
-	var stages []*httpload.Stage
+	var stages []*knload.Stage
 	for _, stageStr := range ss {
-		stage := &httpload.Stage{}
+		stage := &knload.Stage{}
 		_ss := strings.Split(stageStr, ":")
 		if len(_ss) != 2 {
 			continue
@@ -81,16 +81,16 @@ func run(stopCh <-chan struct{}, ops *options.Options) {
 		stages = append(stages, stage)
 	}
 
-	hl := &httpload.HttpLoad{
+	kl := &knload.Knload{
 		Namespace:      ops.Namespace,
 		LabelSelector:  ops.LabelSelector,
 		GatewayAddress: ops.GatewayAddress,
 		SavePath:       ops.SavePath,
 		ServiceUrl:  ops.ServiceUrl,
 		Stages:         stages,
-		ResultChan:     make(chan *httpload.Result, 1000),
+		ResultChan:     make(chan *knload.Result, 1000),
 	}
-	hl.Run()
+	kl.Run()
 	os.Exit(0)
 
 	<-stopCh

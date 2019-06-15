@@ -1,4 +1,4 @@
-package httpload
+package knload
 
 import (
 	"context"
@@ -32,7 +32,7 @@ import (
 	logf "sigs.k8s.io/controller-runtime/pkg/runtime/log"
 )
 
-type HttpLoad struct {
+type Knload struct {
 	Debug            bool
 	Namespace        string
 	LabelSelector    string
@@ -85,7 +85,7 @@ func init() {
 // * In-cluster config if running in cluster
 //
 // * $HOME/.kube/config if exists
-func (hl *HttpLoad) getKubeconfig() (*rest.Config, error) {
+func (hl *Knload) getKubeconfig() (*rest.Config, error) {
 	// If a flag is specified with the config location, use that
 	if len(kubeconfig) > 0 {
 		return clientcmd.BuildConfigFromFlags(masterURL, kubeconfig)
@@ -109,7 +109,7 @@ func (hl *HttpLoad) getKubeconfig() (*rest.Config, error) {
 	return nil, fmt.Errorf("could not locate a kubeconfig")
 }
 
-func (hl *HttpLoad) Run() {
+func (hl *Knload) Run() {
 	var wg sync.WaitGroup
 	var wg1 sync.WaitGroup
 	var wg2 sync.WaitGroup
@@ -226,7 +226,7 @@ type DrawHtml struct {
 	C3CSS           interface{}
 }
 
-func (hl *HttpLoad) run(s *Stage, resultChan chan *Result) {
+func (hl *Knload) run(s *Stage, resultChan chan *Result) {
 	var wg1 sync.WaitGroup
 	wg1.Add(s.Duration + 1)
 	rm := map[int]*Result{}
@@ -311,7 +311,7 @@ func (hl *HttpLoad) run(s *Stage, resultChan chan *Result) {
 	close(resultChan)
 }
 
-func (hl *HttpLoad) doRequest(resultChan chan float64) {
+func (hl *Knload) doRequest(resultChan chan float64) {
 	// do request
 	responseTime, err := hl.getResponseTime()
 	if err != nil {
@@ -322,7 +322,7 @@ func (hl *HttpLoad) doRequest(resultChan chan float64) {
 	resultChan <- responseTime
 }
 
-func (hl *HttpLoad) getResponseTime() (responseTime float64, err error) {
+func (hl *Knload) getResponseTime() (responseTime float64, err error) {
 	u, err := url.Parse(fmt.Sprintf("http://%s", hl.ServiceUrl))
 	if err != nil {
 		glog.Error(err)
@@ -410,11 +410,11 @@ func (hl *HttpLoad) getResponseTime() (responseTime float64, err error) {
 	return float64(t4.Sub(t1)) / float64(time.Second), nil
 }
 
-func (hl *HttpLoad) logResponseTime(msg string, t2, t1 time.Time) {
+func (hl *Knload) logResponseTime(msg string, t2, t1 time.Time) {
 	glog.V(5).Infof("%s %s\n", msg, t2.Sub(t1))
 }
 
-func (hl *HttpLoad) dialContext(network string) func(ctx context.Context, network, addr string) (net.Conn, error) {
+func (hl *Knload) dialContext(network string) func(ctx context.Context, network, addr string) (net.Conn, error) {
 	return func(ctx context.Context, _, addr string) (net.Conn, error) {
 		return (&net.Dialer{
 			Timeout:   10 * time.Second,
@@ -424,7 +424,7 @@ func (hl *HttpLoad) dialContext(network string) func(ctx context.Context, networ
 	}
 }
 
-func (hl *HttpLoad) readResponseBody(resp *http.Response) string {
+func (hl *Knload) readResponseBody(resp *http.Response) string {
 	bodyBytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		glog.Fatal(err)
