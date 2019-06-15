@@ -1,19 +1,20 @@
 # Build the manager binary
-FROM golang:1.12 as builder
+FROM registry.cn-hangzhou.aliyuncs.com/knative-sample/golang:1.12 as builder
 
 # Copy in the go src
-WORKDIR /go/src/github.com/knative-samples/knload/
+WORKDIR /go/src/github.com/knative-sample/knload/
 COPY cmd/   cmd/
 COPY pkg/   pkg/
 COPY vendor/ vendor/
 
 # Build
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o bin/httpload code.aliyun.com/knative-samples/http-client/cmd/
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o bin/knload github.com/knative-sample/knload/cmd/
 
-FROM alpine:3.9
+FROM registry.cn-hangzhou.aliyuncs.com/knative-sample/alpine-sh:3.9
+
 WORKDIR /app/
 RUN mkdir -p /app/bin/
-COPY --from=builder /go/src/code.aliyun.com/knative-samples/http-client/bin/httpload /app/bin/httpload
-ENTRYPOINT ["/app/bin/httpload"]
+COPY --from=builder /go/src/github.com/knative-sample/knload/bin/knload /app/bin/knload
+ENTRYPOINT ["/app/bin/knload"]
 
 

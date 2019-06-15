@@ -1,4 +1,4 @@
-package httpload
+package knload
 
 import (
 	"encoding/base64"
@@ -11,7 +11,7 @@ import (
 	"github.com/golang/glog"
 )
 
-func (hl *HttpLoad) Draw() {
+func (hl *Knload) Draw() {
 	var wg sync.WaitGroup
 	var concurrentList []int
 	var responseTimeList []float64
