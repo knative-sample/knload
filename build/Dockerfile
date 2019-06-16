@@ -10,7 +10,7 @@ COPY vendor/ vendor/
 # Build
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o bin/knload github.com/knative-sample/knload/cmd/
 
-FROM registry.cn-hangzhou.aliyuncs.com/knative-sample/alpine-sh:3.9
+FROM registry.cn-hangzhou.aliyuncs.com/knative-sample/alpine-sh:3.9-263c0d94
 
 WORKDIR /app/
 RUN mkdir -p /app/bin/

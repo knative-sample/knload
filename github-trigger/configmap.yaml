@@ -19,7 +19,7 @@ data:
       - name: build-and-push
         image: "registry.cn-hangzhou.aliyuncs.com/knative-release/kaniko-project-executor:v0.6.0"
         args:
-        - "--dockerfile=/workspace/Dockerfile"
+        - "--dockerfile=/workspace/build/Dockerfile"
         # Replace meteatamel with your actual DockerHub
         - "--destination=registry.cn-hangzhou.aliyuncs.com/knative-sample/knload:{{.ShortCommitid}}"
         env:
